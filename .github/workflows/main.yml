@@ -24,27 +24,20 @@ jobs:
           python -m pip install --upgrade pip
           pip install torch transformers huggingface_hub
 
-      - name: Login to Hugging Face Hub (Optional)
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: |
-          huggingface-cli login --token $HF_TOKEN
+#      - name: Login to Hugging Face Hub (Optional)
+#        env:
+#          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+#        run: |
+#          huggingface-cli login --token $HF_TOKEN
 
       - name: Download LLM Model
         run: |
           from transformers import AutoModelForCausalLM, AutoTokenizer
           import torch
 
-          model_name = "meta-llama/Llama-2-7b-chat-hf"
+          model_name = "bigcode/starcoder2-3b"
           model = AutoModelForCausalLM.from_pretrained(model_name)
           tokenizer = AutoTokenizer.from_pretrained(model_name)
 
           model.save_pretrained("models/llm")
           tokenizer.save_pretrained("models/llm")
-
-      - name: Upload Model as Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: llm-model
-          path: models/llm
-          retention-days: 30
