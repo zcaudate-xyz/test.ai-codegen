@@ -8,7 +8,9 @@ on:
 
 jobs:
   download-llm:
-    runs-on: ghcr.io/zcaudate-xyz/infra-ai-python:main
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/zcaudate-xyz/infra-ai-python:main
 
     steps:
       - name: Checkout Repository
@@ -21,4 +23,4 @@ jobs:
 #          huggingface-cli login --token $HF_TOKEN
 
       - name: Finetune bigcode/starcoder2-3b
-        run: python ./finetune_codestar2-3b.py
+        run: python ./finetune_codestar2_3b.py
