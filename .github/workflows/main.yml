@@ -1,4 +1,4 @@
-name: Download LLM
+name: Finetuning LLMs
 
 on:
   push:
@@ -8,21 +8,11 @@ on:
 
 jobs:
   download-llm:
-    runs-on: ubuntu-latest
+    runs-on: ghcr.io/zcaudate-xyz/infra-ai-python:main
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-
-      - name: Install Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install torch transformers huggingface_hub
 
 #      - name: Login to Hugging Face Hub (Optional)
 #        env:
@@ -30,14 +20,5 @@ jobs:
 #        run: |
 #          huggingface-cli login --token $HF_TOKEN
 
-      - name: Download LLM Model
-        run: |
-          from transformers import AutoModelForCausalLM, AutoTokenizer
-          import torch
-
-          model_name = "bigcode/starcoder2-3b"
-          model = AutoModelForCausalLM.from_pretrained(model_name)
-          tokenizer = AutoTokenizer.from_pretrained(model_name)
-
-          model.save_pretrained("models/llm")
-          tokenizer.save_pretrained("models/llm")
+      - name: Finetune bigcode/starcoder2-3b
+        run: python ./finetune_codestar2-3b.py
